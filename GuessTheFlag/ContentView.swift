@@ -8,17 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @State private var showingAlert = false
+
     var body: some View {
 
         Button(action: {
-            print("Taped")
+            self.showingAlert = true
         }) {
             HStack {
-                Text("Tap Me")
+                Text("Show Alert")
                 Image(systemName: "gamecontroller.fill")
                     .renderingMode(.original)
                     .font(.largeTitle)
             }
+        }
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Swift UI"), message: Text("Guess The Flag App"), dismissButton: .default(Text("Okay")))
         }
 //        ZStack {
 ////            Color(red: 1, green: 0.8, blue: 0)
