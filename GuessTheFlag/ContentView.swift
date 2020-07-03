@@ -13,11 +13,12 @@ struct ContentView: View {
     @State private var correctAnswer = Int.random(in: 0...2)
     @State private var showingScore = false
     @State private var scoreTitle = ""
+    @State private var score = 0
 
     var body: some View {
 
         ZStack {
-            Color(red: 1, green: 0.8, blue: 0).edgesIgnoringSafeArea(.all)
+            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.black]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
             VStack(spacing: 30) {
                 VStack {
                     Text("Tap the flag of")
@@ -25,7 +26,8 @@ struct ContentView: View {
                         .bold()
                     Text(countries[correctAnswer])
                         .foregroundColor(.white)
-                        .bold()
+                        .font(.largeTitle)
+                        .fontWeight(.black)
                 }
                 ForEach(0 ..< 3) { number in
                     Button(action: {
@@ -33,52 +35,29 @@ struct ContentView: View {
                     }) {
                         Image(self.countries[number])
                             .renderingMode(.original)
+                            .clipShape(Capsule())
+                            .overlay(Capsule().stroke(Color.black, lineWidth: /*@START_MENU_TOKEN@*/1.0/*@END_MENU_TOKEN@*/))
+                            .shadow(color: .black, radius: 2)
                     }
                 }
                 Spacer()
             }
         }
         .alert(isPresented: $showingScore) {
-            Alert(title: Text(scoreTitle), message: Text("Your score is ???"), dismissButton:
+            Alert(title: Text(scoreTitle), message: Text("Your score is \(score)"), dismissButton:
                     .default(Text("Continue")) {
                         self.askQuestion()
                     })
         }
-
-//        Button(action: {
-//            self.showingAlert = true
-//        }) {
-//            HStack {
-//                Text("Show Alert")
-//                Image(systemName: "gamecontroller.fill")
-//                    .renderingMode(.original)
-//                    .font(.largeTitle)
-//            }
-//        }
-//        .alert(isPresented: $showingAlert) {
-//            Alert(title: Text("Swift UI"), message: Text("Guess The Flag App"), dismissButton: .default(Text("Okay")))
-//        }
-//        ZStack {
-////            Color(red: 1, green: 0.8, blue: 0)
-////            Color.red.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-//            VStack(alignment: .leading, spacing: 5) {
-//                Text("Hello, world!")
-//                Text("Hello, world!. I am here 🚀😎")
-//            }
-//            HStack(spacing: 20) {
-//                Text("Hello, world!")
-//                Text("Hello, world!. I am back 🚀😎")
-//            }
-//        }
-//        .background(Color(red: 1, green: 0.8, blue: 0))
-//        LinearGradient(gradient: Gradient(colors: [Color.red, Color(red: 1, green: 0.8, blue: 0)]), startPoint: .leading, endPoint: .trailing)
-//        RadialGradient(gradient: Gradient(colors: [Color.blue, Color.black]), center: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/, startRadius: 20, endRadius: 200)
-//        AngularGradient(gradient: Gradient(colors: [.red, .yellow, .green, .blue, .purple, .red]), center: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        //        LinearGradient(gradient: Gradient(colors: [Color.red, Color(red: 1, green: 0.8, blue: 0)]), startPoint: .leading, endPoint: .trailing)
+        //        RadialGradient(gradient: Gradient(colors: [Color.blue, Color.black]), center: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/, startRadius: 20, endRadius: 200)
+        //        AngularGradient(gradient: Gradient(colors: [.red, .yellow, .green, .blue, .purple, .red]), center: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
     }
 
     func flagTapped(_ number: Int) {
 
         if number == correctAnswer {
+            score += 1
             scoreTitle = "Correct"
         } else {
             scoreTitle = "Wrong"
